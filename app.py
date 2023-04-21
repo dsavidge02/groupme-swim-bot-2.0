@@ -13,9 +13,8 @@ def webhook():
     data = request.get_json()
     print(data)
     # We don't want to reply to ourselves!
-    if data['name'] != 'The Anti Palmer':
-        msg = 'I will break into your house and live inside your walls'
-        send_message(msg)
+    if data['name'] == 'The Anti Palmer':
+        return "ok", 200
     if 'palmer' in data['name'].lower():
         msg = 'I will break into your house and live inside your walls'
         send_message(msg, data['id'])
