@@ -3,7 +3,7 @@ import json
 import random
 
 import requests
-
+from datetime import datetime
 from flask import Flask, request
 
 app = Flask(__name__)
@@ -61,7 +61,7 @@ def check_messages(txt):
 	return 'not sure if I know the answer to this yet, sorry'
 
 def whatShirt():
-	day = 3
+	day = datetime.today().weekday()
 	if day == 1:
 		return 'you should be wearing a black shirt!'
 	elif day == 2:
