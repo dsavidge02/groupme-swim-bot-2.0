@@ -56,7 +56,7 @@ def check_messages(txt):
 			whatShirt()
 	return 0
 
-def whatShirt()
+def whatShirt():
 	day = 3
 	if day == 1:
 		return 'you should be wearing a black shirt!'
