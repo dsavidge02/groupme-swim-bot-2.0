@@ -20,7 +20,7 @@ def webhook():
     elif 'palmer' in data['name'].lower() and checking=1:
         msg = 'I will break into your house and live inside your walls'
         send_message(msg, data['id'])
-    elif check_messages(txt)==1
+    elif check_messages(txt)==1:
         msg = 'I don't know the answer to that yet, sorry'
         send_message(msg, data['id'])
 
@@ -49,5 +49,5 @@ def send_message(msg, reply_id):
     requests.post(url, data=json.dumps(info))
     
 def check_messages(txt):
-	if '?' in txt
+	if '?' in txt:
 		return 1 
