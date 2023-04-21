@@ -66,7 +66,7 @@ def whatShirt():
 		return 'you should be wearing a black shirt!'
 	elif day == 2:
 		return 'you should be wearing a gray shirt!'
-	elif day == 3:
+	elif day == 4:
 		return 'you should be wearing a red shirt!'
 	else:
 		return 'how is this possible'
