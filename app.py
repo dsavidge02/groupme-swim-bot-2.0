@@ -13,10 +13,10 @@ def webhook():
     data = request.get_json()
     print(data)
     # We don't want to reply to ourselves!
-    if random.random() < .05:
-        msg = 'Dislike Button'
-        send_message(msg, data['id'])
-    elif 'palmer' in data['name'].lower():
+    if data['name'] != 'The Anti Palmer':
+        msg = 'I will break into your house and live inside your walls'
+        send_message(msg)
+    if 'palmer' in data['name'].lower():
         msg = 'I will break into your house and live inside your walls'
         send_message(msg, data['id'])
 
