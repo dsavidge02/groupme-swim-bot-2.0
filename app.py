@@ -3,8 +3,12 @@ import json
 import random
 
 import requests
+
 from datetime import datetime
+
 from flask import Flask, request
+
+days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
 
 app = Flask(__name__)
 
@@ -51,17 +55,30 @@ def send_message(msg, reply_id):
 
     requests.post(url, data=json.dumps(info))
 def is_question(txt):
-	if '?' in txt:
+	if '?' in txt or 'what' in txt:
 		return 1
 	return 0
 
 def check_messages(txt):
-	if 'color' in txt:
-		return whatShirt()
+	if 'color' in txt or 'shirt' in txt:
+		adder = 0
+		day = -1
+		if 'tomorrow' in txt:
+			adder = 1
+		for i in range(0,len(days)):
+			if days(i) in txt:
+				day = days(i)
+		return whatShirt(adder,day)
 	return 'not sure if I know the answer to this yet, sorry'
 
-def whatShirt():
-	day = datetime.today().weekday()
+def whatShirt(a, d):
+	day = d
+	if day == -1:
+		day = datetime.today().weekday()
+	day += adder
+	if day > 6:
+		day = 0
+	dow = days(day)
 	if day == 1:
 		return 'you should be wearing a black shirt!'
 	elif day == 2:
@@ -69,4 +86,4 @@ def whatShirt():
 	elif day == 4:
 		return 'you should be wearing a red shirt!'
 	else:
-		return 'how is this possible'
+		return 'I have not been taught what shirt you wear on ' + dow
