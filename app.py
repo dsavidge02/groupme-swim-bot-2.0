@@ -54,31 +54,37 @@ def send_message(msg, reply_id):
     print(info)
 
     requests.post(url, data=json.dumps(info))
+def get_days():
+	days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
+	return days
+
 def is_question(txt):
 	if '?' in txt or 'what' in txt:
 		return 1
 	return 0
 
 def check_messages(txt):
+	days = get_days()
 	if 'color' in txt or 'shirt' in txt:
 		adder = 0
 		day = -1
 		if 'tomorrow' in txt:
 			adder = 1
 		for i in range(0,len(days)):
-			if days(i) in txt:
-				day = days(i)
+			if days[i] in txt:
+				day = days[i]
 		return whatShirt(adder,day)
 	return 'not sure if I know the answer to this yet, sorry'
 
 def whatShirt(a, d):
+	days = get_days()
 	day = d
 	if day == -1:
 		day = datetime.today().weekday()
-	day += adder
+	day += a
 	if day > 6:
 		day = 0
-	dow = days(day)
+	dow = days[day]
 	if day == 1:
 		return 'you should be wearing a black shirt!'
 	elif day == 2:
