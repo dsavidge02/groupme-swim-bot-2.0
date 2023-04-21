@@ -12,10 +12,11 @@ app = Flask(__name__)
 def webhook():
     data = request.get_json()
     print(data)
+    checking = 0
     # We don't want to reply to ourselves!
     if data['name'] == 'The Anti Palmer':
         return "ok", 200
-    if 'palmer' in data['name'].lower():
+    if 'palmer' in data['name'].lower() and checking=1:
         msg = 'I will break into your house and live inside your walls'
         send_message(msg, data['id'])
 
