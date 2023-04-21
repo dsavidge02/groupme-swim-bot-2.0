@@ -20,8 +20,9 @@ def webhook():
     elif 'palmer' in data['name'].lower() and checking==1:
         msg = 'I will break into your house and live inside your walls'
         send_message(msg, data['id'])
-    msg = check_messages(txt)
-    send_message(msg, data['id'])
+    elif is_question(txt) == 1:
+    	msg = check_messages(txt)
+    	send_message(msg, data['id'])
     # elif check_messages(txt)==1:
     #     msg = 'I don\'t know the answer to that yet, sorry'
     #     send_message(msg, data['id'])
@@ -49,12 +50,15 @@ def send_message(msg, reply_id):
     print(info)
 
     requests.post(url, data=json.dumps(info))
-    
-def check_messages(txt):
+def is_question(txt):
 	if '?' in txt:
-		if 'color' in txt:
-			whatShirt()
+		return 1
 	return 0
+
+def check_messages(txt):
+	if 'color' in txt:
+		return whatShirt()
+	return 'not sure if I know the answer to this yet, sorry'
 
 def whatShirt():
 	day = 3
@@ -64,3 +68,5 @@ def whatShirt():
 		return 'you should be wearing a gray shirt!'
 	elif day == 3:
 		return 'you should be wearing a red shirt!'
+	else:
+		return 'how is this possible'
