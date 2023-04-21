@@ -17,11 +17,11 @@ def webhook():
     # We don't want to reply to ourselves!
     if data['name'] == 'The Anti Palmer':
         return "ok", 200
-    elif 'palmer' in data['name'].lower() and checking=1:
+    elif 'palmer' in data['name'].lower() and checking==1:
         msg = 'I will break into your house and live inside your walls'
         send_message(msg, data['id'])
     elif check_messages(txt)==1:
-        msg = 'I don't know the answer to that yet, sorry'
+        msg = 'I don\'t know the answer to that yet, sorry'
         send_message(msg, data['id'])
 
     return "ok", 200
@@ -50,4 +50,5 @@ def send_message(msg, reply_id):
     
 def check_messages(txt):
 	if '?' in txt:
-		return 1 
+		return 1
+	return 0
