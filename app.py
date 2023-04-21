@@ -52,7 +52,7 @@ def send_message(msg, reply_id):
     
 def check_messages(txt):
 	if '?' in txt:
-		if 'color' in txt
+		if 'color' in txt:
 			whatShirt()
 	return 0
 
