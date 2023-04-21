@@ -72,7 +72,7 @@ def check_messages(txt):
 			adder = 1
 		for i in range(0,len(days)):
 			if days[i] in txt:
-				day = days[i]
+				day = i
 		return whatShirt(adder,day)
 	return 'not sure if I know the answer to this yet, sorry'
 
