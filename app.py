@@ -54,6 +54,15 @@ def send_message(msg, reply_id):
     print(info)
 
     requests.post(url, data=json.dumps(info))
+	
+def read_lift_days():
+	file = open('liftdays.txt')
+	lines = file.readlines()
+	lift_days = [-1]*3
+	for i in range(0,3):
+		lift_days[i] = int(lines[i].strip())
+	return lift_days
+
 def get_days():
 	days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
 	return days
@@ -85,11 +94,12 @@ def whatShirt(a, d):
 	if day > 6:
 		day = 0
 	dow = days[day]
-	if day == 1:
+	lift_days = read_lift_days()
+	if day == lift_days[0]:
 		return 'you should be wearing a black shirt!'
-	elif day == 2:
+	elif day == lift_days[1]:
 		return 'you should be wearing a gray shirt!'
-	elif day == 4:
+	elif day == lift_days[2]:
 		return 'you should be wearing a red shirt!'
 	else:
 		return 'I have not been taught what shirt you wear on ' + dow
