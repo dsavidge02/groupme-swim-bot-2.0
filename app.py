@@ -25,12 +25,9 @@ def webhook():
         msg = 'I will break into your house and live inside your walls'
         send_message(msg, data['id'])
     elif is_question(txt) == 1:
-    	msg = check_messages(txt)
-    	send_message(msg, data['id'])
-    # elif check_messages(txt)==1:
-    #     msg = 'I don\'t know the answer to that yet, sorry'
-    #     send_message(msg, data['id'])
-
+	if question_handler(txt) == 1:
+     		msg = shirt_question(txt)
+     		send_message(msg, data['id'])
     return "ok", 200
 
 @app.route('/', methods=['GET'])
@@ -50,9 +47,7 @@ def send_message(msg, reply_id):
             'base_reply_id': reply_id
           }]
          }
-
     print(info)
-
     requests.post(url, data=json.dumps(info))
 	
 def read_lift_days():
@@ -72,18 +67,20 @@ def is_question(txt):
 		return 1
 	return 0
 
-def check_messages(txt):
-	days = get_days()
-	if 'color' in txt or 'shirt' in txt:
-		adder = 0
-		day = -1
-		if 'tomorrow' in txt:
-			adder = 1
-		for i in range(0,len(days)):
-			if days[i] in txt:
-				day = i
-		return whatShirt(adder,day)
-	return 'not sure if I know the answer to this yet, sorry'
+def question_handler(txt):
+	if 'color' in txt or 'shirt' in txt: 
+		return 1
+	return 0
+
+def shirt_question(txt):
+	adder = 0
+	day = -1
+	if 'tomorrow' in txt:
+		adder = 1
+	for i in range(0,len(days)):
+		if days[i] in txt:
+			day = i
+	return whatShirt(adder,day)
 
 def whatShirt(a, d):
 	days = get_days()
