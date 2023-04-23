@@ -1,0 +1,4 @@
+1
+2
+4
+The numbers on each line correlate to which day of the week is the 1st lift, 2nd, and 3rd lift
