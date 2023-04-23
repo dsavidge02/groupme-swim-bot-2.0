@@ -73,6 +73,7 @@ def question_handler(txt):
 	return 0
 
 def shirt_question(txt):
+	days = get_days()
 	adder = 0
 	day = -1
 	if 'tomorrow' in txt:
