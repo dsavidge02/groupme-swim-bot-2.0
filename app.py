@@ -49,6 +49,15 @@ def send_message(msg, reply_id):
     print(info)
     requests.post(url, data=json.dumps(info))
 	
+def send_reminder(msg):
+	url  = 'https://api.groupme.com/v3/bots/post'
+    info = {
+          'bot_id' : os.getenv('GROUPME_BOT_ID'),
+          'text'   : msg,
+         }
+    print(info)
+    requests.post(url, data=json.dumps(info))
+	
 def read_lift_days():
 	file = open('liftdays.txt')
 	lines = file.readlines()
@@ -121,7 +130,7 @@ def find_events():
 				if row["outfit"] != '':
 					outfitString = ' and you should wear a ' + row["outfit"]
 				msg = 'We have a ' + row["event"] + dateString + ' in ' + row["location"] + outfitString
-				print(msg)
+				send_reminder(msg)
 	csv_file.close()
 
 def main():
