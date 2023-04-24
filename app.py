@@ -50,11 +50,11 @@ def send_message(msg, reply_id):
     requests.post(url, data=json.dumps(info))
 	
 def send_reminder(msg):
-	url  = 'https://api.groupme.com/v3/bots/post'
+    url = 'https://api.groupme.com/v3/bots/post'
     info = {
-          'bot_id' : os.getenv('GROUPME_BOT_ID'),
-          'text'   : msg,
-         }
+        'bot_id': os.getenv('GROUPME_BOT_ID'),
+        'text': msg
+    }
     print(info)
     requests.post(url, data=json.dumps(info))
 	
