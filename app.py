@@ -101,3 +101,17 @@ def whatShirt(a, d):
 		return 'you should be wearing a red shirt!'
 	else:
 		return 'I have not been taught what shirt you wear on ' + dow
+
+def create_event(dt, location, event, outfit):
+	field_names = ['dt', 'location', 'event', 'outfit']
+	dict = {'dt': dt, 'location': location, 'event': event, 'outfit':outfit}
+	with open('team_events.csv', mode='a') as team_events:
+		event_writer = DictWriter(team_events, fieldnames = field_names)
+		event_writer.writerow(dict)
+		team_events.close()
+
+def main():
+	find_events()
+
+if __name__ == "__main__":
+    main()
