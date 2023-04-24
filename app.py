@@ -4,12 +4,11 @@ import random
 
 import requests
 
-from datetime import datetime
+from datetime import datetime, timedelta
+import csv
+from csv import DictWriter
 
 from flask import Flask, request
-
-days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
-
 app = Flask(__name__)
 
 @app.route('/', methods=['POST'])
@@ -109,6 +108,21 @@ def create_event(dt, location, event, outfit):
 		event_writer = DictWriter(team_events, fieldnames = field_names)
 		event_writer.writerow(dict)
 		team_events.close()
+		
+def find_events():
+	with open('team_events.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			dt = datetime.strptime(row["dt"], '%Y-%m-%d %H:%M:%S')
+			if datetime.now()-timedelta(hours=24) <= dt <= datetime.now()+timedelta(hours=24):
+				dateString1 = dt.strftime("%m/%d")
+				dateString = ' tomorrow ('+dateString1+') at ' + dt.strftime("%I:%M %p")
+				outfitString = ''
+				if row["outfit"] != '':
+					outfitString = ' and you should wear a ' + row["outfit"]
+				msg = 'We have a ' + row["event"] + dateString + ' in ' + row["location"] + outfitString
+				print(msg)
+	csv_file.close()
 
 def main():
 	find_events()
