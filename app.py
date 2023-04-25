@@ -110,22 +110,19 @@ def whatShirt(a, d):
 	else:
 		return 'I have not been taught what shirt you wear on ' + dow
 
-def create_event(dt, location, event, outfit):
-	field_names = ['dt', 'location', 'event', 'outfit']
-	dict = {'dt': dt, 'location': location, 'event': event, 'outfit':outfit}
-	with open('team_events.csv', mode='a') as team_events:
-		event_writer = DictWriter(team_events, fieldnames = field_names)
-		event_writer.writerow(dict)
-		team_events.close()
-		
-def find_events():
+def find_events(dayRange):
 	with open('team_events.csv') as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		for row in csv_reader:
 			dt = datetime.strptime(row["dt"], '%Y-%m-%d %H:%M:%S')
-			if datetime.now()-timedelta(hours=24) <= dt <= datetime.now()+timedelta(hours=24):
+			if dt <= datetime.now()+timedelta(hours=(24*dayRange)):
 				dateString1 = dt.strftime("%m/%d")
-				dateString = ' tomorrow ('+dateString1+') at ' + dt.strftime("%I:%M %p")
+				dateString = ' ('+dateString1+') at ' + dt.strftime("%I:%M %p")
+				if(dayRange == 1):
+					dateString = ' tomorrow' + dateString
+				if(dayRange == 7):
+					dow = dt.strftime('%A')
+					dateString = ' ' + dow + dateString
 				outfitString = ''
 				if row["outfit"] != '':
 					outfitString = ' and you should wear a ' + row["outfit"]
@@ -133,8 +130,71 @@ def find_events():
 				send_reminder(msg)
 	csv_file.close()
 
+def find_daily_event(day_of_week):
+	days = get_days()
+	dow1 = day_of_week
+	if day_of_week == 'today':
+		dow1 = days[datetime.today().weekday()]
+	elif day_of_week == 'tomorrow':
+		ind = datetime.today().weekday()+1
+		if ind > 6:
+			ind = 0
+		dow1 = days[ind]
+	with open('team_events.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			dt = datetime.strptime(row["dt"], '%Y-%m-%d %H:%M:%S')
+			dow = dt.strftime('%A').lower()
+			print(dow1 + ' ' + dow)
+			if dow == dow1 and dt <= datetime.now()+timedelta(hours=(24*7)):
+				dateString1 = dt.strftime("%m/%d")
+				dateString = ' ('+dateString1+') at ' + dt.strftime("%I:%M %p")
+				outfitString = ''
+				if row["outfit"] != '':
+					outfitString = ' and you should wear a ' + row["outfit"]
+				msg = 'We have a ' + row["event"] + ' ' + day_of_week + dateString + ' in ' + row["location"] + outfitString
+				send_reminder(msg)
+
+def clear_events():
+	lines = list()
+	with open('team_events.csv', 'r') as readFile:
+		reader = csv.reader(readFile)
+		line_count = 0
+		for row in reader:
+			if line_count!= 0:
+				dt = datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S')
+				if datetime.now()<dt:
+					lines.append(row)
+			line_count += 1
+	readFile.close()
+	field_names = ['dt', 'location', 'event', 'outfit']
+	with open('team_events.csv', 'w') as writeFile:
+		writer = csv.writer(writeFile)
+		writer.writerow(field_names)
+		writer.writerows(lines) 
+				
+def create_event(dt, location, event, outfit):
+	if(dt < datetime.now()):
+		return 0
+	with open('team_events.csv') as csv_file:
+		csv_reader = csv.DictReader(csv_file)
+		for row in csv_reader:
+			dt2 = datetime.strptime(row["dt"], '%Y-%m-%d %H:%M:%S')
+			if(dt2 == dt):
+				return 0
+	csv_file.close()
+	field_names = ['dt', 'location', 'event', 'outfit']
+	dict = {'dt': dt, 'location': location, 'event': event, 'outfit':outfit}
+	with open('team_events.csv', mode='a') as team_events:
+		event_writer = DictWriter(team_events, fieldnames = field_names)
+		event_writer.writerow(dict)
+
 def main():
-	find_events()
+	clear_events()
+	if datetime.today().weekday() == 6:
+		find_events(7)
+	else:
+		find_events(1)
 
 if __name__ == "__main__":
     main()
