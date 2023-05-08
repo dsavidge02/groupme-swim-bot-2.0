@@ -19,8 +19,8 @@ def webhook():
     txt = data['text'].lower()
     if name == 'MikeGPT':
         return "ok", 200
-    elif reading:
-    	read_event(name,txt)
+    #elif reading:
+    	#read_event(name,txt)
     if anti_spam():
     	return "ok", 200
     if 'palmer' in data['name'].lower() and checking:
