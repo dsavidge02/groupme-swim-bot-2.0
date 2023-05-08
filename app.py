@@ -131,7 +131,7 @@ def event_question(txt):
 			if day in txt:
 				eventFound = find_daily_event(day)
 	if eventFound == 0:
-		msg = 'There doesn\'t seem to be any events'
+		msg = 'There doesn\'t seem to be any events that day'
 		send_reminder(msg)
 		#print(msg)
 
@@ -217,20 +217,17 @@ def get_event_people():
 
 def read_event(name, txt):
 	if name in get_event_people():
-		send_reminder('Dan is in event people')
 		acceptable_events = ['meeting', 'event', 'activity']
 		event = 'NO EVENT'
 		for item in acceptable_events:
 			if item.lower() in txt.lower():
 				event  = item
-				send_reminder(event)
 				break
 		acceptable_locations = ['Mueller', 'Harkness', 'Pool', 'Team Room', 'ECAV', 'Hall of Fame', 'TBD']
 		location = 'NO LOCATION'
 		for item in acceptable_locations:
 			if item.lower() in txt.lower():
 				location = item
-				send_reminder(location)
 				break
 		acceptable_outfits = [' black ', 'gray ', ' grey ', ' red ', ' warmups ', ' quarterzip ', ' RPI Swim Gear ', ' RPI gear ', ' black.', 'gray.', ' grey.', ' red.', ' warmups.', ' quarterzip.', ' RPI Swim Gear.', ' RPI gear.']
 		outfit = ''
@@ -239,9 +236,7 @@ def read_event(name, txt):
 				outfit = item
 				break
 		dt = find_datetime(txt)
-		send_reminder(datetime.strftime(dt, '%Y-%m-%d %H:%M:%S'))
 		if event != 'NO EVENT' and location != 'NO LOCATION' and dt != -1:
-			send_reminder('event created')
 			create_event(dt, location, event, outfit)
 
 def find_datetime(txt):
@@ -317,16 +312,57 @@ def find_date(txt):
 	date = datetime.now().strftime('%Y') + '-' + date
 	return date
 
+def get_nums():
+	return ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ']
+
+def has_pm(txt):
+	if 'pm' in txt.lower() or 'p.m' in txt.lower():
+		nums = get_nums()
+		for num in nums:
+			tmp1 = num+'pm'
+			tmp2 = num+'p.m'
+			if tmp1 in txt.lower() or tmp2 in txt.lower():
+				return True
+	return False
+
+def has_am(txt):
+	if 'am' in txt.lower() or 'a.m' in txt.lower():
+		nums = get_nums()
+		for num in nums:
+			tmp1 = num+'am'
+			tmp2 = num+'a.m'
+			if tmp1 in txt.lower() or tmp2 in txt.lower():
+				return True
+	return False
+
 def find_time(txt):
 	adder = 0
-	if 'pm' in txt.lower():
+	if has_pm(txt):
 		adder = 12
 	i = txt.find(':')
 	time = ''
 	if i != -1:
 		i = txt.index(':')
 	else:
-		return time
+		if ' at ' in txt:
+			j = txt.index(' at ')
+			j = j + 4
+			if txt[j].isnumeric():
+				if not txt[j+1].isnumeric():
+					time = '0' + txt[j] + ':00'
+				elif not txt[j+2].isnumeric():
+					time = txt[j:j+2] + ':00'
+				elif not txt[j+3].isnumeric():
+					time = '0' + txt[j] + ':' + txt[j+1:j+3]
+				else:
+					time = txt[j:j+2] + ':' + txt[j+2:j+4]
+		if not has_am(txt):
+			tmp1 = int(time[0])
+			tmp2 = int(time[1])
+			if tmp1 == 0 and tmp2 < 5:
+				adder = 12
+		time = time + ':00'
+		return [time,adder]
 	while i != -1:
 		if txt[i-2].isnumeric():
 			time = time+txt[i-2]
@@ -345,12 +381,22 @@ def find_time(txt):
 			if j != -1:
 				i = txt.index(':', i+1)
 			else:
+				if not has_am(txt):
+					tmp1 = int(time[0])
+					tmp2 = int(time[1])
+					if tmp1 == 0 and tmp2 < 5:
+						adder = 12
+				time = time + ':00'
 				return [time,adder]
 		else:
 			i=-1
 	time = time + ':00'
+	if not has_am(txt):
+		tmp1 = int(time[0])
+		tmp2 = int(time[1])
+		if tmp1 == 0 and tmp2 < 5:
+			adder = 12
 	return [time,adder]
-
 
 def create_event(dt, location, event, outfit):
 	if(dt < datetime.now()):
