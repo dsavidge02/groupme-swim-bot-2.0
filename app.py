@@ -30,7 +30,6 @@ def webhook():
     	elif questionNum == 2:
     		event_question(txt)
     elif reading:
-    	send_reminder('reading for question')
     	read_event(name,txt)
 
     return "ok", 200
