@@ -30,6 +30,7 @@ def webhook():
     	elif questionNum == 2:
     		event_question(txt)
     elif reading:
+	send_reminder('reading for question')
     	read_event(name,txt)
 
     return "ok", 200
@@ -216,6 +217,7 @@ def get_event_people():
 
 def read_event(name, txt):
 	if name in get_event_people():
+		send_reminder('Dan is in event people')
 		acceptable_events = ['meeting', 'event', 'activity']
 		event = 'NO EVENT'
 		for item in acceptable_events:
@@ -236,6 +238,7 @@ def read_event(name, txt):
 				break
 		dt = find_datetime(txt)
 		if event != 'NO EVENT' and location != 'NO LOCATION' and dt != -1:
+			send_reminder('event created')
 			create_event(dt, location, event, outfit)
 
 def find_datetime(txt):
