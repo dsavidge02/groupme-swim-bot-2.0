@@ -13,20 +13,20 @@ app = Flask(__name__)
 def webhook():
     data = request.get_json()
     print(data)
-    checking = 0
-    reading = 1
+    checking = False
+    reading = True
     name = data['name']
     txt = data['text'].lower()
     if name == 'MikeGPT':
         return "ok", 200
-    #elif reading == 1:
-    	#read_event(name,txt)
-    elif anti_spam():
+    elif reading:
+    	read_event(name,txt)
+    if anti_spam():
     	return "ok", 200
-    elif 'palmer' in data['name'].lower() and checking == 0:
+    if 'palmer' in data['name'].lower() and checking:
         msg = 'I will break into your house and live inside your walls'
         send_message(msg, data['id'])
-    elif is_question(txt) == 1:
+    if is_question(txt) == 1:
     	questionNum = question_handler(txt)
     	if questionNum == 1:
     		msg = shirt_question(txt)
