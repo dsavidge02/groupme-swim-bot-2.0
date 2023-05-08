@@ -21,8 +21,8 @@ def webhook():
         return "ok", 200
     elif reading == 1:
     	read_event(name,txt)
-    elif anti_spam():
-    	return "ok", 200
+    #elif anti_spam():
+    	#return "ok", 200
     elif 'palmer' in data['name'].lower() and checking == 0:
         msg = 'I will break into your house and live inside your walls'
         send_message(msg, data['id'])
