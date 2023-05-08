@@ -223,12 +223,14 @@ def read_event(name, txt):
 		for item in acceptable_events:
 			if item.lower() in txt.lower():
 				event  = item
+				send_reminder(event)
 				break
 		acceptable_locations = ['Mueller', 'Harkness', 'Pool', 'Team Room', 'ECAV', 'Hall of Fame', 'TBD']
 		location = 'NO LOCATION'
 		for item in acceptable_locations:
 			if item.lower() in txt.lower():
 				location = item
+				send_reminder(location)
 				break
 		acceptable_outfits = [' black ', 'gray ', ' grey ', ' red ', ' warmups ', ' quarterzip ', ' RPI Swim Gear ', ' RPI gear ', ' black.', 'gray.', ' grey.', ' red.', ' warmups.', ' quarterzip.', ' RPI Swim Gear.', ' RPI gear.']
 		outfit = ''
@@ -237,6 +239,7 @@ def read_event(name, txt):
 				outfit = item
 				break
 		dt = find_datetime(txt)
+		send_reminder(datetime.strftime(dt, '%Y-%m-%d %H:%M:%S'))
 		if event != 'NO EVENT' and location != 'NO LOCATION' and dt != -1:
 			send_reminder('event created')
 			create_event(dt, location, event, outfit)
