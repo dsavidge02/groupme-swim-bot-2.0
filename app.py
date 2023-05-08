@@ -19,20 +19,19 @@ def webhook():
     txt = data['text'].lower()
     if name == 'MikeGPT':
         return "ok", 200
-    #elif reading:
-    	#read_event(name,txt)
-    if anti_spam():
-    	return "ok", 200
     if 'palmer' in data['name'].lower() and checking:
         msg = 'I will break into your house and live inside your walls'
         send_message(msg, data['id'])
-    if is_question(txt) == 1:
+    if is_question(txt) == 1 and not anti_spam():
     	questionNum = question_handler(txt)
     	if questionNum == 1:
     		msg = shirt_question(txt)
     		send_message(msg, data['id'])
     	elif questionNum == 2:
     		event_question(txt)
+    elif reading:
+    	read_event(name,txt)
+
     return "ok", 200
 
 @app.route('/', methods=['GET'])
