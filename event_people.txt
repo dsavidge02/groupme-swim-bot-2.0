@@ -1,0 +1,7 @@
+Mike
+Shannon O'Brien
+Maria Coomaraswamy-Falkenstein
+Dan Savidge
+Andrew Palmer
+Mike Dowd
+List of people that can create an event in team_events.csv
