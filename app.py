@@ -30,7 +30,7 @@ def webhook():
     	elif questionNum == 2:
     		event_question(txt)
     elif reading:
-	send_reminder('reading for question')
+    	send_reminder('reading for question')
     	read_event(name,txt)
 
     return "ok", 200
@@ -382,7 +382,6 @@ def anti_spam():
 
 def main():
 	clear_events()
-	read_event('Andrew Palmer','There is a meeting next friday at 4:00pm in Mueller')
 	if datetime.today().weekday() == 6:
 		send_reminder('WEEKLY REMINDERS:')
 		find_events(7)
